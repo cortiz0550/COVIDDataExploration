@@ -1,3 +1,4 @@
+-- This is just to get a sense of what the death data looks like.
 SELECT *
 FROM
 	[Portfolio Project]..covidDeaths
@@ -10,8 +11,8 @@ ORDER BY
 --ORDER BY
 --	3,4
 
--- Select the data that we are going to be using
 
+-- Select the data that we are going to be using
 SELECT
 	location,
 	date,
@@ -26,6 +27,7 @@ WHERE
 ORDER BY
 	1,2;
 
+
 -- Looking at total cases vs. total deaths
 -- Shows likelihood of dying if you catch COVID in your country
 SELECT
@@ -37,14 +39,14 @@ SELECT
 FROM
 	[Portfolio Project]..covidDeaths
 WHERE
-	location like '%states%'
+	location LIKE '%states%'
 	AND
 		continent IS NOT Null
 ORDER BY
 	1,2;
 
--- Looking at total cases vs. population
 
+-- Looking at total cases vs. population
 SELECT
 	location,
 	date,
@@ -60,8 +62,8 @@ WHERE
 ORDER BY
 	1,2;
 
--- Looking at countries with highest infection compared to population
 
+-- Looking at countries with highest infection compared to population
 SELECT
 	location,
 	population,
@@ -76,8 +78,8 @@ GROUP BY
 ORDER BY
 	4 DESC;
 
--- Highest death count per population
 
+-- Highest death count per population
 SELECT
 	location,
 	MAX(CAST(total_deaths AS int)) AS total_death_count
@@ -90,8 +92,8 @@ GROUP BY
 ORDER BY
 	total_death_count DESC;
 
--- Looking by continent
 
+-- Looking by continent
 SELECT
 	location,
 	MAX(CAST(total_deaths AS int)) AS total_death_count
@@ -106,8 +108,8 @@ GROUP BY
 ORDER BY
 	total_death_count DESC;
 
--- Global numbers
 
+-- Now we can look at global numbers
 SELECT
 	--date,
 	SUM(new_cases) AS total_cases,
@@ -117,14 +119,11 @@ FROM
 	[Portfolio Project]..covidDeaths
 WHERE
 	continent IS NOT Null
---GROUP BY
---	date
 ORDER BY
 	1,2;
 
 
 -- Looking at total population vs vaccinations
-
 SELECT 
 	dea.continent,
 	dea.location,
@@ -134,7 +133,7 @@ SELECT
 	SUM(CONVERT(bigint, vac.new_vaccinations)) 
 		OVER (
 			PARTITION BY dea.location 
-				ORDER BY dea.location, dea.date) AS rolling_ppl_vaccinated
+			ORDER BY dea.location, dea.date) AS rolling_ppl_vaccinated
 FROM [Portfolio Project]..covidDeaths AS dea
 JOIN [Portfolio Project]..covidVaccinations AS vac
 ON dea.location = vac.location
@@ -144,8 +143,7 @@ ORDER BY
 	2, 3;
 
 
--- Use cte
-
+-- Here I want to use a CTE to find percentages of fully vaccinated populations in their respective countries
 WITH pop_vs_vac(continent, location, date, population, new_vaccinations, rolling_ppl_fully_vaccinated)
 AS (
 	SELECT 
@@ -164,9 +162,6 @@ AS (
 		AND dea.date = vac.date
 	WHERE dea.continent IS NOT NULL
 	AND dea.location = 'United States'
-	--ORDER BY
-	--	2, 3
 )
-
 SELECT *, (rolling_ppl_fully_vaccinated / population) * 100
 FROM pop_vs_vac;
