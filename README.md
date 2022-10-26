@@ -12,5 +12,5 @@ Some of the skills demonstrated in this project include:
 - CTEs
 - Partitions
 
-I find this project helpful to refresh what I have learned, but also challenging enough to keep me improving. Going forward, I want to get a better understanding
+I found this project helpful to refresh what I have learned, but also challenging enough to keep me improving. Going forward, I want to get a better understanding
 of when to use CTEs and Window functions, as I felt that I had to look up a lot when building them in this project.
