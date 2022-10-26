@@ -1,4 +1,4 @@
-# COVIDDataExploration
+# COVID Data Exploration
 
 ## Basic skills Demonstration
 This project was meant to look at an interesting, clean dataset and to see what findings could be generated. I found this dataset through Alex the
